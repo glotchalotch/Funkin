@@ -2416,10 +2416,10 @@ class PlayState extends MusicBeatState
 				if(curBeat < 15) wiimoteAnim("neutral");
 				else {
 					wiimoteAnim("hide");
-					wiiText.visible = false;
+					if(wiiText != null && curSong.toLowerCase() == "tutorial") wiiText.visible = false;
 				}
 			} else {
-				if(curBeat >= 15) {
+				if(curBeat >= 15 && wiimote != null && curSong.toLowerCase() == "tutorial") {
 					wiimote.x = 900;
 					wiimote.y = 100;
 				}
