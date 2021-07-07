@@ -3,11 +3,16 @@ package;
 import Conductor.BPMChangeEvent;
 import flixel.FlxG;
 import flixel.FlxSubState;
+import WiimoteHid.WiimoteReadout;
 
 class MusicBeatSubstate extends FlxSubState
 {
+	
+	private var wiimoteReadout:WiimoteReadout;
+
 	public function new()
 	{
+		wiimoteReadout = WiimoteHid.getWiimoteReadout();
 		super();
 	}
 
@@ -32,6 +37,7 @@ class MusicBeatSubstate extends FlxSubState
 		if (oldStep != curStep && curStep > 0)
 			stepHit();
 
+		wiimoteReadout = WiimoteHid.getWiimoteReadout();
 
 		super.update(elapsed);
 	}

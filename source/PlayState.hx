@@ -112,6 +112,11 @@ class PlayState extends MusicBeatState
 	var bgGirls:BackgroundGirls;
 	var wiggleShit:WiggleEffect = new WiggleEffect();
 
+	var wiimote:FlxSprite;
+	//i am so funny
+	var wiiNote:FlxSprite;
+	var wiiText:FlxText;
+
 	var talking:Bool = true;
 	var songScore:Int = 0;
 	var scoreTxt:FlxText;
@@ -133,6 +138,9 @@ class PlayState extends MusicBeatState
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
 	#end
+
+	var lastPitch:Int;
+	var lastRoll:Int;
 
 	override public function create()
 	{
@@ -678,6 +686,30 @@ class PlayState extends MusicBeatState
 		add(dad);
 		add(boyfriend);
 
+		if(SONG.song.toLowerCase() == "tutorial") {
+			wiimote = new FlxSprite(550, 350);
+			wiimote.frames = Paths.getSparrowAtlas("wiimote", "tutorial");
+			wiimote.setGraphicSize(100);
+			wiimote.animation.addByPrefix("up", "up");
+			wiimote.animation.addByPrefix("down", "down");
+			wiimote.animation.addByPrefix("left", "left");
+			wiimote.animation.addByPrefix("right", "right");
+			wiimote.animation.addByPrefix("neutral", "neutral");
+			wiimote.animation.play("neutral");
+			add(wiimote);
+			wiiNote = new FlxSprite(1100, 260);
+			wiiNote.frames = Paths.getSparrowAtlas("NOTE_assets");
+			wiiNote.setGraphicSize(Std.int(wiiNote.width * 0.7));
+			wiiNote.animation.addByPrefix('left', 'purple0');
+			wiiNote.animation.addByPrefix('up', 'green0');
+			wiiNote.animation.addByPrefix('right', 'red0');
+			wiiNote.animation.addByPrefix('down', 'blue0');
+			wiiNote.visible = false;
+			add(wiiNote);
+			wiiText = new FlxText(550, 650, 0, "Hold the Wiimote\nlevel when you're\nnot playing a\nnote, like this!", 24);
+			add(wiiText);
+		  }
+
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
 		// doof.x += 70;
 		// doof.y = FlxG.height * 0.5;
@@ -921,6 +953,7 @@ class PlayState extends MusicBeatState
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{
 			dad.dance();
+			wiimoteAnim("neutral");
 			gf.dance();
 			boyfriend.playAnim('idle');
 
@@ -1366,7 +1399,7 @@ class PlayState extends MusicBeatState
 
 		scoreTxt.text = "Score:" + songScore;
 
-		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
+		if ((FlxG.keys.justPressed.ENTER || wiimoteReadout.buttons.pressed.plus) && startedCountdown && canPause)
 		{
 			persistentUpdate = false;
 			persistentDraw = true;
@@ -1653,12 +1686,16 @@ class PlayState extends MusicBeatState
 					{
 						case 0:
 							dad.playAnim('singLEFT' + altAnim, true);
+							wiimoteAnim("left");
 						case 1:
 							dad.playAnim('singDOWN' + altAnim, true);
+							wiimoteAnim("down");
 						case 2:
 							dad.playAnim('singUP' + altAnim, true);
+							wiimoteAnim("up");
 						case 3:
 							dad.playAnim('singRIGHT' + altAnim, true);
+							wiimoteAnim("right");
 					}
 
 					dad.holdTimer = 0;
@@ -1699,6 +1736,9 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.ONE)
 			endSong();
 		#end
+
+		lastPitch = wiimoteReadout.pitch;
+		lastRoll = wiimoteReadout.roll;
 	}
 
 	function endSong():Void
@@ -1940,20 +1980,20 @@ class PlayState extends MusicBeatState
 	private function keyShit():Void
 	{
 		// HOLDING
-		var up = controls.UP;
-		var right = controls.RIGHT;
-		var down = controls.DOWN;
-		var left = controls.LEFT;
+		var up = controls.UP || (wiimoteReadout.pitch >= 170 && lastPitch >= 170);
+		var right = controls.RIGHT || (wiimoteReadout.roll <= 54 && lastRoll <= 54);
+		var down = controls.DOWN || (wiimoteReadout.pitch <= 54 && lastPitch <= 54);
+		var left = controls.LEFT || (wiimoteReadout.roll >= 200 && lastRoll >= 200);
 
-		var upP = controls.UP_P;
-		var rightP = controls.RIGHT_P;
-		var downP = controls.DOWN_P;
-		var leftP = controls.LEFT_P;
+		var upP = controls.UP_P || (wiimoteReadout.pitch >= 170 && lastPitch < 170);
+		var rightP = controls.RIGHT_P || (wiimoteReadout.roll <= 54 && lastRoll > 54);
+		var downP = controls.DOWN_P || (wiimoteReadout.pitch <= 54 && lastPitch > 54);
+		var leftP = controls.LEFT_P || (wiimoteReadout.roll >= 200 && lastRoll < 200);
 
-		var upR = controls.UP_R;
-		var rightR = controls.RIGHT_R;
-		var downR = controls.DOWN_R;
-		var leftR = controls.LEFT_R;
+		var upR = controls.UP_R || (wiimoteReadout.pitch < 170 && lastPitch >= 170);
+		var rightR = controls.RIGHT_R || (wiimoteReadout.roll > 54 && lastRoll <= 54);
+		var downR = controls.DOWN_R || (wiimoteReadout.pitch > 54 && lastPitch <= 54);
+		var leftR = controls.LEFT_R || (wiimoteReadout.roll < 200 && lastRoll >= 200);
 
 		var controlArray:Array<Bool> = [leftP, downP, upP, rightP];
 
@@ -2371,8 +2411,20 @@ class PlayState extends MusicBeatState
 			// Conductor.changeBPM(SONG.bpm);
 
 			// Dad doesnt interupt his own notes
-			if (SONG.notes[Math.floor(curStep / 16)].mustHitSection)
+			if (SONG.notes[Math.floor(curStep / 16)].mustHitSection) {
 				dad.dance();
+				if(curBeat < 15) wiimoteAnim("neutral");
+				else {
+					wiimoteAnim("hide");
+					wiiText.visible = false;
+				}
+			} else {
+				if(curBeat >= 15) {
+					wiimote.x = 900;
+					wiimote.y = 100;
+				}
+				wiimoteAnim("neutral");
+			}
 		}
 		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
 		wiggleShit.update(Conductor.crochet);
@@ -2466,4 +2518,42 @@ class PlayState extends MusicBeatState
 	}
 
 	var curLight:Int = 0;
+
+	function wiimoteAnim(anim:String)
+	{
+		if (curSong.toLowerCase() == "tutorial" && wiimote != null && wiiNote != null)
+		{
+			switch (anim)
+			{
+				case "down":
+					wiimote.visible = true;
+					wiimote.animation.play("down");
+					wiiNote.visible = true;
+					wiiNote.animation.play("down");
+				case "left":
+					wiimote.visible = true;
+					wiimote.animation.play("left");
+					wiiNote.visible = true;
+					wiiNote.animation.play("left");
+				case "right":
+					wiimote.visible = true;
+					wiimote.animation.play("right");
+					wiiNote.visible = true;
+					wiiNote.animation.play("right");
+				case "up":
+					wiimote.visible = true;
+					wiimote.animation.play("up");
+					wiiNote.visible = true;
+					wiiNote.animation.play("up");
+				case "neutral":
+					wiimote.visible = true;
+					wiimote.animation.play("neutral");
+					wiiNote.visible = false;
+				case "hide":
+					wiimote.visible = false;
+					wiiNote.visible = false;
+			}
+		}
+	}
 }
+

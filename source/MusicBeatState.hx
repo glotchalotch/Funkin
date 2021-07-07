@@ -6,6 +6,7 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.FlxUIState;
 import flixel.math.FlxRect;
 import flixel.util.FlxTimer;
+import WiimoteHid.WiimoteReadout;
 
 class MusicBeatState extends FlxUIState
 {
@@ -16,6 +17,8 @@ class MusicBeatState extends FlxUIState
 	private var curBeat:Int = 0;
 	private var controls(get, never):Controls;
 
+	private var wiimoteReadout:WiimoteReadout;
+
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
 
@@ -23,6 +26,8 @@ class MusicBeatState extends FlxUIState
 	{
 		if (transIn != null)
 			trace('reg ' + transIn.region);
+
+		wiimoteReadout = WiimoteHid.getWiimoteReadout();
 
 		super.create();
 	}
@@ -37,6 +42,8 @@ class MusicBeatState extends FlxUIState
 
 		if (oldStep != curStep && curStep > 0)
 			stepHit();
+
+		wiimoteReadout = WiimoteHid.getWiimoteReadout();
 
 		super.update(elapsed);
 	}

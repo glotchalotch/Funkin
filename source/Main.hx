@@ -7,6 +7,7 @@ import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import sys.thread.Thread;
 
 class Main extends Sprite
 {
@@ -63,9 +64,12 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
-		#if !debug
+		/*#if !debug
 		initialState = TitleState;
-		#end
+		#end*/
+
+		var wiimoteFound:Bool = WiimoteHid.setup();
+		if(!wiimoteFound) initialState = WiimoteNotFoundState;
 
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen));
 

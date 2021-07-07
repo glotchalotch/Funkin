@@ -192,9 +192,9 @@ class FreeplayState extends MusicBeatState
 
 		scoreText.text = "PERSONAL BEST:" + lerpScore;
 
-		var upP = controls.UP_P;
-		var downP = controls.DOWN_P;
-		var accepted = controls.ACCEPT;
+		var upP = controls.UP_P || wiimoteReadout.dpad.pressed.up;
+		var downP = controls.DOWN_P || wiimoteReadout.dpad.pressed.down;
+		var accepted = controls.ACCEPT || wiimoteReadout.buttons.a;
 
 		if (upP)
 		{
@@ -205,9 +205,9 @@ class FreeplayState extends MusicBeatState
 			changeSelection(1);
 		}
 
-		if (controls.LEFT_P)
+		if (controls.LEFT_P || wiimoteReadout.dpad.pressed.left)
 			changeDiff(-1);
-		if (controls.RIGHT_P)
+		if (controls.RIGHT_P || wiimoteReadout.dpad.pressed.right)
 			changeDiff(1);
 
 		if (controls.BACK)
@@ -258,7 +258,7 @@ class FreeplayState extends MusicBeatState
 	function changeSelection(change:Int = 0)
 	{
 		#if !switch
-		NGio.logEvent('Fresh');
+		//NGio.logEvent('Fresh');
 		#end
 
 		// NGio.logEvent('Fresh');

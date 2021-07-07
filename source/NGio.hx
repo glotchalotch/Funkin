@@ -30,7 +30,7 @@ class NGio
 	public static var ngScoresLoaded(default, null):FlxSignal = new FlxSignal();
 
 	public static var GAME_VER:String = "";
-	public static var GAME_VER_NUMS:String = '';
+	public static var GAME_VER_NUMS:String = 'v0.2.7.1';
 	public static var gotOnlineVer:Bool = false;
 
 	public static function noLogin(api:String)

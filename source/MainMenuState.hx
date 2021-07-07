@@ -119,24 +119,27 @@ class MainMenuState extends MusicBeatState
 
 		if (!selectedSomethin)
 		{
-			if (controls.UP_P)
+			if(FlxG.keys.pressed.SEVEN) {
+				FlxG.switchState(new WiimoteDebugState());
+			}
+			if (controls.UP_P || wiimoteReadout.dpad.pressed.up)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(-1);
 			}
 
-			if (controls.DOWN_P)
+			if (controls.DOWN_P || wiimoteReadout.dpad.pressed.down)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(1);
 			}
 
-			if (controls.BACK)
+			if (controls.BACK || wiimoteReadout.buttons.b)
 			{
 				FlxG.switchState(new TitleState());
 			}
 
-			if (controls.ACCEPT)
+			if (controls.ACCEPT || wiimoteReadout.buttons.a)
 			{
 				if (optionShit[curSelected] == 'donate')
 				{

@@ -1,0 +1,1 @@
+g++ ./WiimoteHid.cpp -shared -o ./bin/wiimote.ndll -I./include -lsetupapi -lhid -lhidclass

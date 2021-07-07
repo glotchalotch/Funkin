@@ -31,11 +31,11 @@ class OutdatedSubState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if (controls.ACCEPT)
+		if (controls.ACCEPT || wiimoteReadout.buttons.pressed.a)
 		{
 			FlxG.openURL("https://ninja-muffin24.itch.io/funkin");
 		}
-		if (controls.BACK)
+		if (controls.BACK || wiimoteReadout.buttons.pressed.b)
 		{
 			leftState = true;
 			FlxG.switchState(new MainMenuState());

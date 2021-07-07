@@ -52,10 +52,10 @@ class GitarooPause extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if (controls.LEFT_P || controls.RIGHT_P)
+		if (controls.LEFT_P || controls.RIGHT_P || wiimoteReadout.dpad.pressed.left || wiimoteReadout.dpad.pressed.right)
 			changeThing();
 
-		if (controls.ACCEPT)
+		if (controls.ACCEPT || wiimoteReadout.buttons.a)
 		{
 			if (replaySelect)
 			{

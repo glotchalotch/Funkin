@@ -55,12 +55,12 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
-		if (controls.ACCEPT)
+		if (controls.ACCEPT || wiimoteReadout.buttons.a)
 		{
 			endBullshit();
 		}
 
-		if (controls.BACK)
+		if (controls.BACK || wiimoteReadout.buttons.b)
 		{
 			FlxG.sound.music.stop();
 

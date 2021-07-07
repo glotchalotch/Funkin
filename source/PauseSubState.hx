@@ -84,9 +84,9 @@ class PauseSubState extends MusicBeatSubstate
 
 		super.update(elapsed);
 
-		var upP = controls.UP_P;
-		var downP = controls.DOWN_P;
-		var accepted = controls.ACCEPT;
+		var upP = controls.UP_P || wiimoteReadout.dpad.pressed.up;
+		var downP = controls.DOWN_P || wiimoteReadout.dpad.pressed.down;
+		var accepted = controls.ACCEPT || wiimoteReadout.buttons.a;
 
 		if (upP)
 		{
