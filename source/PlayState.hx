@@ -686,7 +686,7 @@ class PlayState extends MusicBeatState
 		add(dad);
 		add(boyfriend);
 
-		if(SONG.song.toLowerCase() == "tutorial") {
+		if(SONG.song.toLowerCase() == "tutorial" && Paths.getSparrowAtlas("wiimote", "tutorial") != null) {
 			wiimote = new FlxSprite(550, 350);
 			wiimote.frames = Paths.getSparrowAtlas("wiimote", "tutorial");
 			wiimote.setGraphicSize(100);
