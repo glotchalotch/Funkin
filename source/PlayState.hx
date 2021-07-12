@@ -1983,7 +1983,7 @@ class PlayState extends MusicBeatState
 		var up = controls.UP || (wiimoteReadout.pitch >= 170 && lastPitch >= 170);
 		var right = controls.RIGHT || (wiimoteReadout.roll <= 54 && lastRoll <= 54);
 		var down = controls.DOWN || (wiimoteReadout.pitch <= 54 && lastPitch <= 54);
-		var left = controls.LEFT || (wiimoteReadout.roll >= 200 && lastRoll >= 200);
+		var left = controls.LEFT || (wiimoteReadout.roll >= 170 && lastRoll >= 170);
 
 		var upP = controls.UP_P || (wiimoteReadout.pitch >= 170 && lastPitch < 170);
 		var rightP = controls.RIGHT_P || (wiimoteReadout.roll <= 54 && lastRoll > 54);
