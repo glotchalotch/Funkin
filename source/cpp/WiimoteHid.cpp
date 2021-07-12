@@ -1,4 +1,9 @@
-#include <iostream>
+#define IMPLEMENT_API
+#include <hx/CFFI.h>
+
+//#include <iostream>
+//note to self: for some godforsaken reason, including iostream makes the ndll invalid when run outside of lime command.
+//how and why does this happen? dont know dont care. thank the lord it wasnt caused by something i actually needed.
 
 #include <Windows.h>
 #include <sdkddkver.h>
@@ -18,7 +23,7 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 //#include "hidapi.h"
-#include "WiimoteHid.h"
+//#include "WiimoteHid.h"
 
 HANDLE OpenWiimote;
 
