@@ -1981,18 +1981,18 @@ class PlayState extends MusicBeatState
 	{
 		// HOLDING
 		var up = controls.UP || (wiimoteReadout.pitch >= 170 && lastPitch >= 170);
-		var right = controls.RIGHT || (wiimoteReadout.roll <= 54 && lastRoll <= 54);
-		var down = controls.DOWN || (wiimoteReadout.pitch <= 54 && lastPitch <= 54);
-		var left = controls.LEFT || (wiimoteReadout.roll >= 170 && lastRoll >= 170);
+		var right = controls.RIGHT || (wiimoteReadout.roll <= 84 && lastRoll <= 84);
+		var down = controls.DOWN || (wiimoteReadout.pitch <= 84 && lastPitch <= 84);
+		var left = controls.LEFT || (wiimoteReadout.roll >= 200 && lastRoll >= 200);
 
 		var upP = controls.UP_P || (wiimoteReadout.pitch >= 170 && lastPitch < 170);
-		var rightP = controls.RIGHT_P || (wiimoteReadout.roll <= 54 && lastRoll > 54);
-		var downP = controls.DOWN_P || (wiimoteReadout.pitch <= 54 && lastPitch > 54);
+		var rightP = controls.RIGHT_P || (wiimoteReadout.roll <= 84 && lastRoll > 84);
+		var downP = controls.DOWN_P || (wiimoteReadout.pitch <= 84 && lastPitch > 84);
 		var leftP = controls.LEFT_P || (wiimoteReadout.roll >= 200 && lastRoll < 200);
 
 		var upR = controls.UP_R || (wiimoteReadout.pitch < 170 && lastPitch >= 170);
-		var rightR = controls.RIGHT_R || (wiimoteReadout.roll > 54 && lastRoll <= 54);
-		var downR = controls.DOWN_R || (wiimoteReadout.pitch > 54 && lastPitch <= 54);
+		var rightR = controls.RIGHT_R || (wiimoteReadout.roll > 84 && lastRoll <= 84);
+		var downR = controls.DOWN_R || (wiimoteReadout.pitch > 84 && lastPitch <= 84);
 		var leftR = controls.LEFT_R || (wiimoteReadout.roll < 200 && lastRoll >= 200);
 
 		var controlArray:Array<Bool> = [leftP, downP, upP, rightP];
