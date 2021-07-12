@@ -11,9 +11,9 @@ import flixel.FlxState;
 class WiimoteNotFoundState extends FlxState {
     var failedText:FlxUIText;
     override public function create() {
-        var text:FlxUIText = new FlxUIText(60, 275, 0,
+        var text:FlxUIText = new FlxUIText(60, 235, 0,
             "No Wiimote detected. Make sure the HID Wiimote driver is properly installed\nand the Wiimote is connected with its lights on solid.
-            Try using WiiPair.exe for easier pairing.\n\nPress ENTER to retry", 24);
+Try using WiiPair for easier pairing.\n\nPress ENTER to retry\nPress SPACE to download HID Wiimote\nPress ESC to download WiiPair", 24);
         text.autoSize = false;
         text.alignment = FlxTextAlign.CENTER;
         add(text);
@@ -48,6 +48,10 @@ class WiimoteNotFoundState extends FlxState {
                 new FlxTimer().start(0.7, (t:FlxTimer) -> sound.stop());
                 new FlxTimer().start(1.5, (t:FlxTimer) -> failedText.visible = false);
             }
+        } else if(FlxG.keys.justPressed.SPACE) {
+            FlxG.openURL("https://www.julianloehr.de/educational-work/hid-wiimote/");
+        } else if(FlxG.keys.justPressed.ESCAPE) {
+            FlxG.openURL("https://github.com/jordanbtucker/WiiPair/releases");
         }
         super.update(elapsed);
     }
