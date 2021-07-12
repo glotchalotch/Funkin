@@ -65,6 +65,14 @@ class WiimoteHid {
     public static function getWiimoteReadout():WiimoteReadout {
         var result = _getWiimoteReadout();
         if(result == null) return null;
+        var err = Reflect.field(result, "err");
+        if(err != null) {
+            var nerr:Int = cast(err, Int);
+            var message:String = 'Wiimote Read Error ${nerr}\n';
+            if(nerr == 1167) message += "This means you disconnected the Wiimote while playing the game.\nIf you didn't do that, please notify me on GitHub.";
+            else message += "Please report this error to me on GitHub! It's probably a you problem, but it could be a me problem, or at least a common enough problem for me to have to put out a notice about it.";
+            throw new haxe.Exception(message);
+        }
         var dpadY:UInt = Reflect.field(result, "dpadY");
         var dpadX:UInt = Reflect.field(result, "dpadX");
         var wbuttons:UInt = Reflect.field(result, "buttons");

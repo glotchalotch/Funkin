@@ -1,6 +1,8 @@
 #define IMPLEMENT_API
 #include <hx/CFFI.h>
 
+#include <string>
+
 //#include <iostream>
 //note to self: for some godforsaken reason, including iostream makes the ndll invalid when run outside of lime command.
 //how and why does this happen? dont know dont care. thank the lord it wasnt caused by something i actually needed.
@@ -65,14 +67,13 @@ DEFINE_PRIM(Setup, 0);
 value GetWiimoteReadout() {
     UCHAR buf[255];
     DWORD bytesRead;
-    OVERLAPPED overlapped;
     bool keepReading = true;
-    bool err = false;
     BOOL result = ReadFile(OpenWiimote, &buf, sizeof(buf), &bytesRead, NULL);
+    DWORD err = GetLastError();
     /*while(keepReading) {
                 if(!result) {
                     //this bit is copypasted from the hid wiimote sample program lol my patience is running out
-                    DWORD Error = GetLastError();
+                    
                     if (Error != ERROR_IO_PENDING)
                     {
                         std::cout << "Read Failed: " << std::hex << Error << std::endl;
@@ -103,7 +104,7 @@ value GetWiimoteReadout() {
                     }
                 }
             }*/
-    if (!err)
+    if (result)
     {
         value readout = alloc_empty_object();
         alloc_field(readout, val_id("dpadY"), alloc_int(buf[1]));
@@ -111,6 +112,11 @@ value GetWiimoteReadout() {
         alloc_field(readout, val_id("buttons"), alloc_int(buf[3]));
         alloc_field(readout, val_id("pitch"), alloc_int(buf[6]));
         alloc_field(readout, val_id("roll"), alloc_int(buf[7]));
+        return readout;
+    } else if(err != ERROR_IO_PENDING)
+    {
+        value readout = alloc_empty_object();
+        alloc_field(readout, val_id("err"), alloc_int(err));
         return readout;
     } else return alloc_null();
 }
